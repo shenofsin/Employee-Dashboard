@@ -17,6 +17,12 @@ const formLanguage = document.getElementById("language")
 const formCity = document.getElementById("city")
 const formManager = document.getElementById("manager")
 
+const menu = document.getElementById("menu");
+const closeMenu = document.getElementById("closeMenu");
+const music = document.getElementById("music");
+const song = document.getElementById("song");
+let isPlaying = false;
+
 async function main() {
     let allEmployees = [];
     const emptyStateHTML = `  <div id ="emptyState" class = "hidden flex-col h-full justify-center items-center w-full gap-0.3">
@@ -179,13 +185,51 @@ async function main() {
             employeeForm.reset();
             alert("Employee added successfully");
             await loadEmployees();
-        } catch(error)
-        {
+        } catch (error) {
             console.log("Failed to add this employee : ", error.message);
             alert(error.message);
         }
     })
 
+    menu.addEventListener("click", () => {
+        employeeForm.classList.toggle("-translate-x-full");
+        employeeForm.classList.toggle("translate-x-0");
+    })
+
+
+    closeMenu.addEventListener("click", () => {
+        employeeForm.classList.toggle("-translate-x-full");
+        employeeForm.classList.toggle("translate-x-0");
+    })
+
+    music.addEventListener("click", () => {
+        if (!isPlaying) {
+            song.play();
+            // console.log("Song is playing")
+            // music.textContent = "music_note"
+
+        } else {
+            song.pause();
+            // console.log("Song is paused");
+            // music.textContent = "music_off"
+        }
+        isPlaying = !isPlaying;
+    })
+
+    song.addEventListener("play", () => {
+        console.log("Song is playing")
+        music.textContent = "music_note"
+    })
+
+    song.addEventListener("pause", () => {
+        console.log("Song is paused");
+        music.textContent = "music_off"
+    })
+
+    song.addEventListener("ended",()=>{
+        console.log("Song has ended");
+        music.textContent = "music_off"
+    })
     await loadEmployees();
 }
 

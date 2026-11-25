@@ -7,7 +7,8 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "tailwind": "npx @tailwindcss/cli -i ./src/input.css -o ./public/output.css --watch",
     "start" : "node app.js",
-    "build" : "npx @tailwindcss/cli -i ./src/input.css -o ./public/output.css"
+    "build" : "npx @tailwindcss/cli -i ./src/input.css -o ./public/output.css",
+    "dev" : "nodemon app.js"
   },
   "keywords": [],
   "author": "Jasonmani Lingkhim Rai",

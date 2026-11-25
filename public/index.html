@@ -6,28 +6,41 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Employee Dashboard</title>
   <link rel="stylesheet" href="./output.css">
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet">
 </head>
 
 <body
-  class="mx-auto container gap-2 bg-[url('/images/japan.jpg')] bg-cover bg-fixed bg-center bg-blend-darken flex justify-center items-center h-screen">
-  <section class="bg-gray-900 w-[70%] h-[80vh] rounded-lg p-4 max-h-[80vh] overflow-auto">
+  class="mx-auto lg:container gap-2 bg-[url('/images/japan.jpg')] bg-cover bg-fixed bg-center bg-blend-darken flex justify-center items-center h-screen">
+  <header class="header h-[5vh] bg-black flex flex-row justify-between items-center px-3 fixed top-0 left-0 w-screen">
+    <span id="menu" class="material-symbols-outlined invert cursor-pointer">
+      menu
+    </span>
+    <span id = "music" class="material-symbols-outlined invert cursor-pointer">
+      music_note
+    </span>
+  </header>
+  <section
+    class="w-full h-[90vh] max-h-[90vh] bg-gray-900 lg:w-[70%] lg:h-[80vh] rounded-lg p-4 lg:max-h-[80vh] overflow-auto">
     <div class="flex flex-row gap-2">
       <h1 class="text-white font-semibold p-3 text-lg w-auto">Employee Dashboard</h1>
       <input type="text" id="searchBar" placeholder="Search Employees..."
         class="flex-1 rounded-md bg-gray-800 text-white font-semibold p-2 outline-none">
     </div>
 
+    <audio id="song" src="/audio/crazyForYou.mp3"></audio>
+
     <div class="flex h-auto w-full justify-between p-3">
       <p class="text-fuchsia-50 font-semibold">Employees</p>
       <p id="employeeCount" class="text-fuchsia-50 font-semibold"> </p>
     </div>
+
     <div class="flex border-t  border-gray-400 p-5 gap-3">
       <button id="generateBtn"
         class="flex-1 bg-green-950 rounded-md p-3 text-green-100 font-semibold cursor-pointer hover:bg-green-900 transition-all duration-700">
         Generate
       </button>
       <button id="resetBtn"
-        class="flex-1 bg-red-950 rounded-md p-3 text-red-100 font-semibold cursor-pointer hover:bg-red-900 transitional-all duration-700">
+        class="flex-1 bg-red-950 rounded-md p-3 text-red-100 font-semibold cursor-pointer hover:bg-red-900 transition-all duration-700">
         Reset
       </button>
     </div>
@@ -54,46 +67,55 @@
   </section>
 
 
-    <form action="" id="employeeForm"
-      class="text-white h-[80vh] w-[30%] bg-gray-950 rounded-lg p-5 flex flex-col gap-3 justify-start overflow-hidden">
-      <span>
-        <label for="name" class="cursor-pointer">Name : </label>
-        <input type="text" name="name" id="name" placeholder="Enter Name"
-          class="bg-white text-gray-900 p-2 mx-1.5 rounded-2xl text-xs" required>
-      </span>
+  <form action="" id="employeeForm"
+    class="flex fixed left-0 top-0 -translate-x-full z-50 transition-all lg:translate-x-0 duration-300 ease-in-out w-auto  lg:static lg:flex text-white h-[80vh] lg:w-[30%] bg-gray-950 rounded-lg p-5  flex-col gap-3 justify-start overflow-hidden">
+     <div class = "flex justify-between ">
+        <span id="closeMenu" class="material-symbols-outlined cursor-pointer">
+          menu
+        </span>
+        <p>Employee Form</p>
+      </div>
+    <span>
+    <label for="name" class="cursor-pointer">Name : </label>
+      <input type="text" name="name" id="name" placeholder="Enter Name"
+        class="bg-white text-gray-900 p-2 mx-1.5 rounded-2xl text-xs" required>
+    </span>
 
-      <span>
-        <label for="salary" class=" cursor-pointer">Salary : </label>
-        <input type="number" name="salary" id="salary" placeholder="Enter Salary" required min="0"
-          class="bg-white text-gray-900 p-2 mx-1.5 rounded-2xl text-xs" required>
-      </span>
+    <span>
+      <label for="salary" class=" cursor-pointer">Salary : </label>
+      <input type="number" name="salary" id="salary" placeholder="Enter Salary" required min="0"
+        class="bg-white text-gray-900 p-2 mx-1.5 rounded-2xl text-xs" required>
+    </span>
 
-      <span>
-        <label for="language" class=" cursor-pointer">Language : </label>
-        <input type="text" name="language" id="language" placeholder="e.g. JavaScript" required
-          class="bg-white text-gray-900 p-2 mx-1.5 rounded-2xl text-xs" required>
-      </span>
+    <span>
+      <label for="language" class=" cursor-pointer">Language : </label>
+      <input type="text" name="language" id="language" placeholder="e.g. JavaScript" required
+        class="bg-white text-gray-900 p-2 mx-1.5 rounded-2xl text-xs" required>
+    </span>
 
-      <span>
-        <label for="city" class=" cursor-pointer">City : </label>
-        <input type="text" name="city" id="city" placeholder="Enter City" required
-          class="bg-white text-gray-900 p-2 mx-1.5 rounded-2xl text-xs" required>
-      </span>
+    <span>
+      <label for="city" class=" cursor-pointer">City : </label>
+      <input type="text" name="city" id="city" placeholder="Enter City" required
+        class="bg-white text-gray-900 p-2 mx-1.5 rounded-2xl text-xs" required>
+    </span>
 
-      <span>
-        <input type="checkbox" id="manager" name="manager" class="h-3.5 w-3.5 accent-green-400 cursor-pointer">
-        <label for="manager" class="mx-1 italic font-light">Is this Employee a manager?</label>
-      </span>
+    <span>
+      <input type="checkbox" id="manager" name="manager" class="h-3.5 w-3.5 accent-green-400 cursor-pointer">
+      <label for="manager" class="mx-1 italic font-light">Is this Employee a manager?</label>
+    </span>
 
-      <button type="submit"
-        class="bg-green-600 text-white font-semibold px-3 py-2 rounded-3xl w-fit text-sm cursor-pointer">Add
-        Employee</button>
+    <button type="submit"
+      class="bg-green-600 text-white font-semibold px-3 py-2 rounded-3xl w-fit text-sm cursor-pointer">Add
+      Employee</button>
 
-        <a href = "https://github.com/shenofsin/Employee-Dashboard" class = "text-gray-600 cursor-pointer text-xs mt-auto mx-auto"><h2 class = "text-gray-600 cursor-pointer text-xs mt-auto mx-auto">chosen | @jasonflowerboy</h2></a>
-    </form>
+    <a href="https://github.com/shenofsin/Employee-Dashboard"
+      class="text-gray-600 cursor-pointer text-xs mt-auto mx-auto">
+      <h2 class="text-gray-600 cursor-pointer text-xs mt-auto mx-auto">chosen | @jasonflowerboy</h2>
+    </a>
+  </form>
 
-    
- 
+
+
 
 
 
