@@ -1,122 +1,261 @@
-# Employee Management Dashboard
+# Employee Dashboard
 
-A simple full-stack Employee Management Dashboard built using **Node.js, Express, MongoDB, Mongoose, JavaScript, and Tailwind CSS**.
+A full-stack Employee Management Dashboard built using **Node.js, Express, MongoDB, Mongoose, JavaScript, and Tailwind CSS**.
 
-This project was created as a hands-on learning project to practice backend development, database operations, REST API integration, and frontend DOM manipulation.
+The application allows users to manage employee records through a simple dashboard interface. It supports creating employees, generating sample employee data, viewing employee records, deleting individual employees, and resetting the employee collection.
+
+🚀 **Live Demo:** [Employee Dashboard](https://employee-dashboard-1pa4.onrender.com)
+
+---
 
 ## Features
 
-- Generate 10 random employee records
-- Display employee details dynamically
-- Show employee salary, city, language, and role
-- Distinguish Managers and Employees using colored badges
-- Search employees by name
-- Delete individual employees
-- Reset the employee database
-- Display employee count
-- Show an empty state when no employees are available
-- Background image with Tailwind CSS styling
+- **View Employees** — Fetch and display employee records stored in MongoDB.
+- **Add Employees** — Create employee records through a form.
+- **Generate Sample Data** — Generate multiple sample employees with randomized details.
+- **Delete Employees** — Remove individual employee records.
+- **Reset Employees** — Delete all employee documents from the collection.
+- **Search Employees** — Search and filter employee records on the frontend.
+- **Persistent Database** — Employee data is stored in MongoDB Atlas.
+- **Responsive Interface** — Dashboard styled using Tailwind CSS.
+
+---
 
 ## Tech Stack
 
-**Frontend**
-- HTML
-- JavaScript
+### Frontend
+- HTML5
 - Tailwind CSS
+- JavaScript
 - Fetch API
 
-**Backend**
+### Backend
 - Node.js
 - Express.js
-- MongoDB
 - Mongoose
+
+### Database
+- MongoDB Atlas
+
+### Deployment
+- Render
+- GitHub
+
+---
 
 ## Project Structure
 
 ```text
-EmployeeApp/
-├── models/
-│   └── model.js
-├── public/
-│   ├── images/
-│   │   └── japan.jpg
-│   ├── index.html
-│   ├── output.css
-│   └── script.js
+Employee-Dashboard/
 ├── app.js
 ├── package.json
-└── .gitignore
+├── package-lock.json
+├── .env
+├── .gitignore
+│
+├── models/
+│   └── model.js
+│
+├── src/
+│   └── input.css
+│
+└── public/
+    ├── index.html
+    ├── output.css
+    ├── style.css
+    └── script.js
 ```
 
+---
+
 ## Getting Started
+
+Follow these steps to run the project locally.
 
 ### 1. Clone the repository
 
 ```bash
-git clone https://github.com/shenofsin/employee-management-dashboard.git
+git clone https://github.com/shenofsin/Employee-Dashboard.git
 ```
 
-### 2. Navigate to the project directory
+Navigate into the project directory:
 
 ```bash
-cd employee-management-dashboard
+cd Employee-Dashboard
 ```
 
-### 3. Install dependencies
+### 2. Install dependencies
 
 ```bash
 npm install
 ```
 
-### 4. Start MongoDB
+### 3. Configure environment variables
 
-Make sure MongoDB is running locally.
+Create a `.env` file in the project root:
 
-This project uses the `CompanyDB` database.
-
-### 5. Start the server
-
-```bash
-node app.js
+```env
+PORT=3000
+MONGO_URI=your_mongodb_connection_string
 ```
 
-### 6. Open the application
+Replace `your_mongodb_connection_string` with your MongoDB connection URI.
 
-Visit:
+For example, a local MongoDB connection can use:
 
+```env
+MONGO_URI=mongodb://127.0.0.1:27017/CompanyDB
+```
+
+Alternatively, use a MongoDB Atlas connection string.
+
+**Never commit your `.env` file or expose your database credentials.**
+
+### 4. Build Tailwind CSS
+
+Generate the CSS file:
+
+```bash
+npm run build
+```
+
+This generates the production stylesheet at:
+
+```text
+public/output.css
+```
+
+### 5. Start the application
+
+```bash
+npm start
+```
+
+Open the application in your browser:
+
+```text
 http://localhost:3000
-
-## API Endpoints
-
-| Method | Endpoint | Description |
-|---|---|---|
-| GET | `/employees` | Fetch all employees |
-| POST | `/generate` | Generate and insert random employees |
-| DELETE | `/employees/:id` | Delete an employee by ID |
-| DELETE | `/reset` | Delete all employee records |
-
-## Concepts Practiced
-
-- Creating REST API endpoints using Express
-- Connecting MongoDB using Mongoose
-- Performing CRUD operations
-- Using `insertMany()`, `find()`, and `deleteMany()`
-- Using the Fetch API to communicate with the backend
-- Dynamically generating HTML using JavaScript
-- Using `.map()`, `.filter()`, and `.join()`
-- Implementing event delegation
-- Working with `data-*` attributes and `dataset`
-- Updating the DOM using `innerHTML` and `textContent`
-- Styling components using Tailwind CSS
-
-## Future Improvements
-
-- Add employee creation and editing forms
-- Improve error handling
-- Add form validation
-- Add sorting and filtering options
-- Improve responsiveness and UI design
+```
 
 ---
 
-Built as a learning project while exploring full-stack web development.
+## Available Scripts
+
+| Command | Description |
+|---|---|
+| `npm start` | Starts the Express server |
+| `npm run build` | Builds the Tailwind CSS stylesheet |
+| `npm run tailwind` | Runs Tailwind CSS in watch mode during development |
+
+---
+
+## API Endpoints
+
+The backend provides the following API routes:
+
+| Method | Endpoint | Description |
+|---|---|---|
+| `GET` | `/employees` | Retrieve all employees |
+| `POST` | `/employees` | Create a new employee |
+| `POST` | `/generate` | Generate sample employees |
+| `DELETE` | `/employees/:id` | Delete an employee by ID |
+| `DELETE` | `/reset` | Delete all employee documents |
+
+### Example Employee Object
+
+```json
+{
+  "name": "Jason Rai",
+  "salary": 50000,
+  "language": "JavaScript",
+  "city": "Siliguri",
+  "isManager": false
+}
+```
+
+---
+
+## Database
+
+The application uses MongoDB with Mongoose for database operations.
+
+Employee records are stored in the `employees` collection.
+
+The database connection is configured through the `MONGO_URI` environment variable.
+
+When connected to MongoDB Atlas, employee records persist in the cloud and can be accessed by both the local application and the deployed application if they use the same database.
+
+---
+
+## Deployment
+
+The application is deployed on **Render**.
+
+The frontend and backend are hosted together as a single Express application.
+
+### Render Configuration
+
+| Setting | Value |
+|---|---|
+| Build Command | `npm install && npm run build` |
+| Start Command | `npm start` |
+| Environment | Node.js |
+
+The following environment variable must be configured in Render:
+
+```env
+MONGO_URI=your_mongodb_atlas_connection_string
+```
+
+The deployed application connects to MongoDB Atlas for persistent employee data.
+
+---
+
+## Error Handling
+
+The application includes basic error handling for API requests.
+
+- Frontend requests check `response.ok` to detect unsuccessful HTTP responses.
+- Asynchronous fetch operations use `try...catch`.
+- Express error middleware handles malformed JSON requests.
+- API routes return JSON responses with appropriate HTTP status codes.
+
+---
+
+## Future Improvements
+
+- Update employee details
+- Employee authentication and authorization
+- Pagination for employee records
+- Improved form validation
+- Employee sorting and advanced filtering
+- Dashboard analytics and charts
+- Better loading states and notifications
+- Improved production error handling
+
+---
+
+## Learning Outcomes
+
+This project helped me practice:
+
+- Building REST API endpoints using Express
+- Performing CRUD operations with MongoDB and Mongoose
+- Connecting a Node.js application to MongoDB Atlas
+- Serving frontend files through Express
+- Using the Fetch API for frontend-backend communication
+- Handling asynchronous requests and errors
+- Building CSS using Tailwind CLI
+- Managing environment variables
+- Deploying a full-stack application using Render
+- Understanding the relationship between GitHub, hosting, and databases
+
+---
+
+## Author
+
+**Jason Rai**
+
+B.Tech Computer Science and Engineering
+
+[GitHub](https://github.com/shenofsin)
