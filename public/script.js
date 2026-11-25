@@ -8,6 +8,15 @@ const empList = document.getElementById("empList");
 const searchBar = document.getElementById("searchBar");
 const deleteBtn = document.getElementById("deleteBtn");
 
+
+//getting the submitted form data
+const employeeForm = document.getElementById("employeeForm");
+const formName = document.getElementById("name")
+const formSalary = document.getElementById("salary")
+const formLanguage = document.getElementById("language")
+const formCity = document.getElementById("city")
+const formManager = document.getElementById("manager")
+
 async function main() {
     let allEmployees = [];
        const emptyStateHTML = `  <div id ="emptyState" class = "hidden flex-col h-full justify-center items-center w-full gap-0.3">
@@ -110,6 +119,31 @@ async function main() {
             await loadEmployees();
         }
     });
+
+    employeeForm.addEventListener("submit", async (e)=>{
+        e.preventDefault();
+        const name = formName.value;
+        const salary = Number(formSalary.value);
+        const language = formLanguage.value;
+        const city = formCity.value;
+        const isManager = formManager.checked;
+        const employee = {name,salary,language,city,isManager}  //JS object
+
+        const response = await fetch("/employees", {
+            method : "POST",
+            headers : {"Content-Type" : "application/json"},
+            body : JSON.stringify(employee) //converting the JS object to JSON 
+        })
+        const result = await response.json();   //parsing the JSON to a JS object.
+        if(!response.ok)
+        {
+            throw new Error(result.message || "Failed to add employee");
+        }
+        console.log("Employee Added Successfully -> ", result.message);
+        employeeForm.reset();
+        alert("Employee added successfully");
+        await loadEmployees();
+    })
 
     await loadEmployees();
 }

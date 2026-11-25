@@ -136,6 +136,17 @@ app.delete("/employees/:id", async (req,res)=>{
 })
 
 
+app.post("/employees",async (req,res)=>{
+    const {name,salary,language,city,isManager} = req.body;
+    const newEmployee = await Employee.create({
+        name,salary,language,city,isManager
+    });
+    res.status(201).json({
+        message : "Employee Created Successfully",
+        newEmployee
+    });
+})
+
 app.listen(PORT, ()=>{
     console.log(`The server is live at http://127.0.0.1:${PORT}`);
 })
