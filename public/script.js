@@ -19,18 +19,27 @@ const formManager = document.getElementById("manager")
 
 async function main() {
     let allEmployees = [];
-       const emptyStateHTML = `  <div id ="emptyState" class = "hidden flex-col h-full justify-center items-center w-full gap-0.3">
+    const emptyStateHTML = `  <div id ="emptyState" class = "hidden flex-col h-full justify-center items-center w-full gap-0.3">
             <h1 class = "text-white font-bold text-3xl m-0 p-1">No Active Employees</h1>
             <p class = "text-gray-700 font-semibold text-sm m-0 p-1 translate-x-5">Click to generate them...</p>
         </div>
 `;
 
     async function loadEmployees() {
-        const response = await fetch("/employees", { method: "GET" });
-        const employeesObject = await response.json();
-        displayEmployees(employeesObject.employees);
-        allEmployees = employeesObject.employees;
-        console.log(`${allEmployees}`);
+        try {
+            const response = await fetch("/employees", { method: "GET" });
+            if (!response.ok) {
+                throw new Error("Failed to load employees");
+            }
+            const employeesObject = await response.json();
+            displayEmployees(employeesObject.employees);
+            allEmployees = employeesObject.employees;
+            console.log(`${allEmployees}`);
+        } catch (error) {
+            console.log("Error in loading employees : ", error.message);
+            alert(error.message);
+        }
+
     }
 
     function displayEmployees(employees) {
@@ -38,8 +47,8 @@ async function main() {
             empList.textContent = "Employee List : No Active Employees";
             employeeCount.textContent = "0 Employees";
             employeeContainer.innerHTML = emptyStateHTML;
-         //   emptyState.classList.remove("hidden");      //this is referencing to the original/old emptyState'
-           // emptyState.classList.add("flex");
+            //   emptyState.classList.remove("hidden");      //this is referencing to the original/old emptyState'
+            // emptyState.classList.add("flex");
             const currEmptyState = document.getElementById("emptyState");
             currEmptyState.classList.remove("hidden");
             currEmptyState.classList.add("flex");
@@ -76,28 +85,48 @@ async function main() {
     }
 
     generateBtn.addEventListener("click", async () => {
-        const response = await fetch("/generate", { method: "POST" });
-        const employees = await response.json();
-        // console.log(employees);
-        alert("Employees Added");
-        // displayEmployees(employees);
-        await loadEmployees();
+        try {
+            const response = await fetch("/generate", { method: "POST" });
+            const employees = await response.json();
+            if (!response.ok) {
+                throw new Error(employees.message)
+            }
+            // console.log(employees);
+            alert("Employees Added");
+            // displayEmployees(employees);
+            await loadEmployees();
+        } catch (error) {
+            console.log("Error generating employees : ", error.message)
+            alert(error.message)
+        }
     });
 
- 
+
 
     resetBtn.addEventListener("click", async () => {
-        const response = await fetch("/reset", { method: "DELETE" });
-        console.log(response);
-        alert("All Employees Deleted.");
+        try {
+            const response = await fetch("/reset", { method: "DELETE" });
+            const data = await response.json();
+            if (!response.ok) {
+                throw new Error(data.message);
+            }
+            console.log(data);
+            alert("All Employees Deleted.");
+            await loadEmployees();
+        } catch (error) {
+            console.log("Error deleting all the employees : ", error.message);
+            alert(error.message);
+        }
+
+
         //    empList.textContent = "Employee List : No Active Employees";
-        employeeContainer.innerHTML = emptyStateHTML;
-        const newEmptyState = document.getElementById("emptyState");     //as the old emptyState was referring to the old id, now its a newly created one.
-        newEmptyState.classList.add("flex");
-        newEmptyState.classList.remove("hidden");
+        //  employeeContainer.innerHTML = emptyStateHTML;
+        // const newEmptyState = document.getElementById("emptyState");     //as the old emptyState was referring to the old id, now its a newly created one.
+        //  newEmptyState.classList.add("flex");
+        //   newEmptyState.classList.remove("hidden");
         // employeeContainer.innerHTML = "";
         //    employeeCount.innerHTML = 0 Employees;
-        await loadEmployees();
+        // await loadEmployees();
     });
 
     searchBar.addEventListener("input", () => {
@@ -108,41 +137,53 @@ async function main() {
         displayEmployees(filteredEmployees);
     });
 
-    //Event-Delegation approach
+    //Event-Delegation approach - delete an employee
     employeeContainer.addEventListener("click", async (event) => {
-        if (event.target.classList.contains("deleteBtn")) {
-            const employeeID = event.target.dataset.id;
-            const response = await fetch(`/employees/${employeeID}`, { method: "DELETE" });
-            const deletedEmp = await response.json();
-            console.log(`${deletedEmp.name} is fired.`);
-            alert(`${deletedEmp.name} is fired.`);
-            await loadEmployees();
+        try {   //event.target.closest("deleteBtn");
+            if (event.target.classList.contains("deleteBtn")) {
+                const employeeID = event.target.dataset.id;
+                const response = await fetch(`/employees/${employeeID}`, { method: "DELETE" });
+                const deletedEmp = await response.json();
+                if (!response.ok) {
+                    throw new Error(deletedEmp.message);
+                }
+                console.log(`${deletedEmp.name} is fired.`);
+                alert(`${deletedEmp.name} is fired.`);
+                await loadEmployees();
+            }
+        } catch (error) {
+            console.log("Error deleting the employee : ", error.message);
+            alert(error.message);
         }
     });
 
-    employeeForm.addEventListener("submit", async (e)=>{
+    employeeForm.addEventListener("submit", async (e) => {
         e.preventDefault();
         const name = formName.value;
         const salary = Number(formSalary.value);
         const language = formLanguage.value;
         const city = formCity.value;
         const isManager = formManager.checked;
-        const employee = {name,salary,language,city,isManager}  //JS object
-
-        const response = await fetch("/employees", {
-            method : "POST",
-            headers : {"Content-Type" : "application/json"},
-            body : JSON.stringify(employee) //converting the JS object to JSON 
-        })
-        const result = await response.json();   //parsing the JSON to a JS object.
-        if(!response.ok)
+        const employee = { name, salary, language, city, isManager }  //JS object (Destructured)
+        try {
+            const response = await fetch("/employees", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(employee) //converting the JS object to JSON 
+            })
+            const result = await response.json();   //parsing the JSON to a JS object.
+            if (!response.ok) {
+                throw new Error(result.message || "Failed to add employee");
+            }
+            console.log("Employee Added Successfully -> ", result.message);
+            employeeForm.reset();
+            alert("Employee added successfully");
+            await loadEmployees();
+        } catch(error)
         {
-            throw new Error(result.message || "Failed to add employee");
+            console.log("Failed to add this employee : ", error.message);
+            alert(error.message);
         }
-        console.log("Employee Added Successfully -> ", result.message);
-        employeeForm.reset();
-        alert("Employee added successfully");
-        await loadEmployees();
     })
 
     await loadEmployees();
